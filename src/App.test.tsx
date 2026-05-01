@@ -42,4 +42,18 @@ describe('App integration flow', () => {
     fireEvent.click(screen.getAllByRole('button', { name: /Volver a Temas/i })[0]);
     expect(await screen.findByText('Matemáticas')).toBeInTheDocument();
   });
+
+  it('opens lengua tema 8 and shows first lengua section', async () => {
+    renderApp();
+    fireEvent.click(screen.getByRole('button', { name: /Lengua/i }));
+    expect(await screen.findByText('Lengua')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /Tema 8/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Comprobar/i })).toBeInTheDocument();
+    });
+    expect(screen.getByText('Cada palabra')).toBeInTheDocument();
+    expect(screen.getByText('Cada palabra en su lugar')).toBeInTheDocument();
+  });
 });

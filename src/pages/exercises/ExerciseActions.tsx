@@ -17,6 +17,9 @@ interface ExerciseActionsProps {
   generateEngGrammar: () => void;
   generateEngNumbers: () => void;
   generateEngListen: () => void;
+  generateCadaPalabra: () => void;
+  generateCorrigeError: () => void;
+  generateCambiaGenero: () => void;
 }
 
 const ExerciseActions = ({
@@ -32,7 +35,10 @@ const ExerciseActions = ({
   generateEngVocab,
   generateEngGrammar,
   generateEngNumbers,
-  generateEngListen
+  generateEngListen,
+  generateCadaPalabra,
+  generateCorrigeError,
+  generateCambiaGenero
 }: ExerciseActionsProps): JSX.Element => (
   <>
     {feedback && (
@@ -47,7 +53,24 @@ const ExerciseActions = ({
         !isCompleted ? (
           <button onClick={checkSolution} className={cn(actionButton({ intent: 'primary' }), 'text-5xl')}>Comprobar</button>
         ) : (
-          <button onClick={() => { if (subject === 'matematicas') { if (currentSection === 'graficos') generateGraficos(); else if (currentSection === 'operaciones') generateOperaciones(); else if (currentSection === 'relojes') generateRelojes(); else generateProblemas(); } else { if (currentSection === 'vocab') generateEngVocab(); else if (currentSection === 'grammar') generateEngGrammar(); else generateEngNumbers(); } }} className={cn(actionButton({ intent: 'success', italic: true }), 'text-5xl')}>¡Siguiente! <ChevronRight strokeWidth={5} size={64} /></button>
+          <button onClick={() => {
+            if (subject === 'matematicas') {
+              if (currentSection === 'graficos') generateGraficos();
+              else if (currentSection === 'operaciones') generateOperaciones();
+              else if (currentSection === 'relojes') generateRelojes();
+              else generateProblemas();
+            } else if (subject === 'english') {
+              if (currentSection === 'vocab') generateEngVocab();
+              else if (currentSection === 'grammar') generateEngGrammar();
+              else generateEngNumbers();
+            } else if (currentSection === 'cadaPalabra') {
+              generateCadaPalabra();
+            } else if (currentSection === 'corrigeError') {
+              generateCorrigeError();
+            } else {
+              generateCambiaGenero();
+            }
+          }} className={cn(actionButton({ intent: 'success', italic: true }), 'text-5xl')}>¡Siguiente! <ChevronRight strokeWidth={5} size={64} /></button>
         )
       )}
       {currentSection === 'listen' && (

@@ -154,4 +154,62 @@ describe('validateExercise', () => {
     expect(validateExercise({ ...baseInput, exercise: numbers, engInput: { n0: 'three' } }).ok).toBe(true);
     expect(validateExercise({ ...baseInput, exercise: listen }).ok).toBe(true);
   });
+
+  it('validates corrige error answers as case-insensitive article only', () => {
+    const exercise: Exercise = {
+      type: 'corrigeError',
+      name: 'Corrige el error',
+      questions: [
+        { noun: 'perro', wrongArticle: 'la', correctArticle: 'el' },
+        { noun: 'abuelas', wrongArticle: 'el', correctArticle: 'las' },
+        { noun: 'libreta', wrongArticle: 'los', correctArticle: 'la' },
+        { noun: 'estuches', wrongArticle: 'la', correctArticle: 'los' }
+      ]
+    };
+
+    const ok = validateExercise({
+      ...baseInput,
+      exercise,
+      engInput: { q0: 'EL', q1: 'Las', q2: 'la', q3: 'los' }
+    });
+    const fail = validateExercise({
+      ...baseInput,
+      exercise,
+      engInput: { q0: 'la', q1: 'las', q2: 'la', q3: 'los' }
+    });
+
+    expect(ok.ok).toBe(true);
+    expect(fail.ok).toBe(false);
+  });
+
+  it('validates cambia genero with accent-insensitive multiple valid answers and strict format', () => {
+    const exercise: Exercise = {
+      type: 'cambiaGenero',
+      name: 'Cambia el género',
+      prompt: {
+        source: 'El niño está contento.',
+        validAnswers: ['La niña está contenta.', 'La niña esta contenta.']
+      }
+    };
+
+    const ok = validateExercise({
+      ...baseInput,
+      exercise,
+      engInput: { respuesta: 'La niña está contenta.' }
+    });
+    const wrongCase = validateExercise({
+      ...baseInput,
+      exercise,
+      engInput: { respuesta: 'la niña está contenta.' }
+    });
+    const wrongPunctuation = validateExercise({
+      ...baseInput,
+      exercise,
+      engInput: { respuesta: 'La niña está contenta' }
+    });
+
+    expect(ok.ok).toBe(true);
+    expect(wrongCase.ok).toBe(false);
+    expect(wrongPunctuation.ok).toBe(false);
+  });
 });

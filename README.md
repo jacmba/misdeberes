@@ -23,6 +23,14 @@ npm run dev
 
 Vite will print a local URL (for example `http://localhost:5173`).
 
+If your environment resolves `localhost` to IPv6 first and the page does not load, use:
+
+```bash
+npm run dev -- --host 0.0.0.0 --port 5173
+```
+
+Then open `http://127.0.0.1:5173`.
+
 ## Production build
 
 ```bash
@@ -65,6 +73,12 @@ Run E2E tests:
 
 ```bash
 npm run e2e
+```
+
+If Playwright browsers are not installed yet, run once:
+
+```bash
+npm run e2e:setup
 ```
 
 Interactive mode:

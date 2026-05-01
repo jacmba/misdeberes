@@ -40,7 +40,10 @@ const ThemesPage = ({ subject, onBack, onSelectSection }: ThemesPageProps): JSX.
   } else if (subject === 'lengua') {
     subjectTitle = 'Lengua';
     Icon = Book;
-    themesData = [{ id: 't1', title: 'Tema actual', desc: 'Próximamente...', enabled: false }];
+    themesData = [
+      { id: 'tema7', title: 'Tema 7', desc: 'Repaso anterior...', enabled: false },
+      { id: 'tema8', title: 'Tema 8', desc: 'Artículos masculino y femenino', enabled: true, firstSection: 'cadaPalabra' }
+    ];
   } else if (subject === 'science') {
     subjectTitle = 'Science';
     Icon = Microscope;

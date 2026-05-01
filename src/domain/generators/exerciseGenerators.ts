@@ -1,6 +1,10 @@
 import { ANIMAL_GRAMMAR_DATA, ENG_NUMBERS, ENGLISH_BODY_PARTS } from '../data/englishData';
+import { CAMBIA_GENERO_PROMPTS, CORRIGE_ERROR_TEMPLATES, LENGUA_NOUNS } from '../data/lenguaData';
 import { OTHER_NAMES, PROB_ITEMS, QUESTION_TYPES, THEMES_GRAFICOS } from '../data/mathData';
 import type {
+  CambiaGeneroExercise,
+  CadaPalabraExercise,
+  CorrigeErrorExercise,
   GrammarExercise,
   GraficosExercise,
   ListenExercise,
@@ -148,4 +152,32 @@ export const generateEngListenExercise = (): ListenExercise => {
   }
   const n = Math.floor(Math.random() * 20) + 1;
   return { type: 'listen', name: 'Listen and Repeat', word: ENG_NUMBERS[n], translation: n.toString(), displayEmoji: n };
+};
+
+export const generateCadaPalabraExercise = (): CadaPalabraExercise => {
+  const words = [...LENGUA_NOUNS].sort(() => 0.5 - Math.random()).slice(0, 10);
+  return { type: 'cadaPalabra', name: 'Cada palabra en su lugar', words };
+};
+
+const getWrongArticle = (correctArticle: string): string => {
+  const articlePool = ['el', 'la', 'los', 'las'];
+  const options = articlePool.filter(item => item !== correctArticle.toLowerCase());
+  return options[Math.floor(Math.random() * options.length)];
+};
+
+export const generateCorrigeErrorExercise = (): CorrigeErrorExercise => {
+  const questions = [...CORRIGE_ERROR_TEMPLATES]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 4)
+    .map(item => ({
+      noun: item.noun,
+      correctArticle: item.correctArticle,
+      wrongArticle: getWrongArticle(item.correctArticle)
+    }));
+  return { type: 'corrigeError', name: 'Corrige el error', questions };
+};
+
+export const generateCambiaGeneroExercise = (): CambiaGeneroExercise => {
+  const prompt = CAMBIA_GENERO_PROMPTS[Math.floor(Math.random() * CAMBIA_GENERO_PROMPTS.length)];
+  return { type: 'cambiaGenero', name: 'Cambia el género', prompt };
 };

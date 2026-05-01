@@ -1,5 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import {
+  generateCambiaGeneroExercise,
+  generateCadaPalabraExercise,
+  generateCorrigeErrorExercise,
   generateEngGrammarExercise,
   generateEngListenExercise,
   generateEngNumbersExercise,
@@ -126,6 +129,27 @@ const useExerciseController = ({
     setIsCompleted(false);
   }, [setExercise, setFeedback, setIsCompleted]);
 
+  const generateCadaPalabra = useCallback(() => {
+    setExercise(generateCadaPalabraExercise());
+    setEngInput({});
+    setFeedback(null);
+    setIsCompleted(false);
+  }, [setEngInput, setExercise, setFeedback, setIsCompleted]);
+
+  const generateCorrigeError = useCallback(() => {
+    setExercise(generateCorrigeErrorExercise());
+    setEngInput({});
+    setFeedback(null);
+    setIsCompleted(false);
+  }, [setEngInput, setExercise, setFeedback, setIsCompleted]);
+
+  const generateCambiaGenero = useCallback(() => {
+    setExercise(generateCambiaGeneroExercise());
+    setEngInput({});
+    setFeedback(null);
+    setIsCompleted(false);
+  }, [setEngInput, setExercise, setFeedback, setIsCompleted]);
+
   useEffect(() => {
     if (view !== 'exercises' || !currentSection) return;
 
@@ -137,7 +161,10 @@ const useExerciseController = ({
       vocab: 'vocab',
       grammar: 'grammar',
       numbers: 'numbers',
-      listen: 'listen'
+      listen: 'listen',
+      cadaPalabra: 'cadaPalabra',
+      corrigeError: 'corrigeError',
+      cambiaGenero: 'cambiaGenero'
     };
 
     const targetType = sectionTypeMap[currentSection as Exclude<Section, ''>];
@@ -152,7 +179,10 @@ const useExerciseController = ({
     if (currentSection === 'grammar') generateEngGrammar();
     if (currentSection === 'numbers') generateEngNumbers();
     if (currentSection === 'listen') generateEngListen();
-  }, [view, currentSection, exercise, generateGraficos, generateOperaciones, generateRelojes, generateProblemas, generateEngVocab, generateEngGrammar, generateEngNumbers, generateEngListen]);
+    if (currentSection === 'cadaPalabra') generateCadaPalabra();
+    if (currentSection === 'corrigeError') generateCorrigeError();
+    if (currentSection === 'cambiaGenero') generateCambiaGenero();
+  }, [view, currentSection, exercise, generateGraficos, generateOperaciones, generateRelojes, generateProblemas, generateEngVocab, generateEngGrammar, generateEngNumbers, generateEngListen, generateCadaPalabra, generateCorrigeError, generateCambiaGenero]);
 
   const checkSolution = (): void => {
     if (!exercise) return;
@@ -185,7 +215,10 @@ const useExerciseController = ({
     generateEngVocab,
     generateEngGrammar,
     generateEngNumbers,
-    generateEngListen
+    generateEngListen,
+    generateCadaPalabra,
+    generateCorrigeError,
+    generateCambiaGenero
   };
 };
 

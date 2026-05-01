@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
+  generateCambiaGeneroExercise,
+  generateCadaPalabraExercise,
+  generateCorrigeErrorExercise,
   generateEngGrammarExercise,
   generateEngListenExercise,
   generateEngNumbersExercise,
@@ -67,5 +70,31 @@ describe('exercise generators', () => {
     const listen = generateEngListenExercise();
     expect(listen.type).toBe('listen');
     expect(listen.word.length).toBeGreaterThan(0);
+  });
+
+  it('generates cada palabra exercise with 10 unique words', () => {
+    const exercise = generateCadaPalabraExercise();
+    expect(exercise.type).toBe('cadaPalabra');
+    expect(exercise.words).toHaveLength(10);
+    expect(new Set(exercise.words.map(item => item.noun)).size).toBe(10);
+    expect(exercise.words.every(item => item.gender === 'masculino' || item.gender === 'femenino')).toBe(true);
+  });
+
+  it('generates corrige error with 4 always-wrong article pairs', () => {
+    const exercise = generateCorrigeErrorExercise();
+    expect(exercise.type).toBe('corrigeError');
+    expect(exercise.questions).toHaveLength(4);
+    expect(
+      exercise.questions.every(
+        question => question.wrongArticle.toLowerCase() !== question.correctArticle.toLowerCase()
+      )
+    ).toBe(true);
+  });
+
+  it('generates cambia genero with valid answers set', () => {
+    const exercise = generateCambiaGeneroExercise();
+    expect(exercise.type).toBe('cambiaGenero');
+    expect(exercise.prompt.source.length).toBeGreaterThan(0);
+    expect(exercise.prompt.validAnswers.length).toBeGreaterThan(0);
   });
 });

@@ -39,7 +39,14 @@ vi.mock('../domain/generators/exerciseGenerators', () => ({
   generateEngVocabExercise: vi.fn(() => ({ type: 'vocab', name: 'Vocab', displayItems: [], wordList: [] })),
   generateEngGrammarExercise: vi.fn(() => ({ type: 'grammar', name: 'Grammar', animalEmoji: '', animalName: '', questions: [] })),
   generateEngNumbersExercise: vi.fn(() => ({ type: 'numbers', name: 'Numbers', questions: [] })),
-  generateEngListenExercise: vi.fn(() => ({ type: 'listen', name: 'Listen', word: 'one', translation: '1', displayEmoji: 1 }))
+  generateEngListenExercise: vi.fn(() => ({ type: 'listen', name: 'Listen', word: 'one', translation: '1', displayEmoji: 1 })),
+  generateCadaPalabraExercise: vi.fn(() => ({ type: 'cadaPalabra', name: 'Cada palabra en su lugar', words: [] })),
+  generateCorrigeErrorExercise: vi.fn(() => ({ type: 'corrigeError', name: 'Corrige el error', questions: [] })),
+  generateCambiaGeneroExercise: vi.fn(() => ({
+    type: 'cambiaGenero',
+    name: 'Cambia el género',
+    prompt: { source: 'El niño está contento.', validAnswers: ['La niña está contenta.'] }
+  }))
 }));
 
 vi.mock('../domain/validators/exerciseValidators', () => ({

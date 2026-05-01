@@ -7,6 +7,7 @@ import {
 import FontLink from '../components/FontLink';
 import type { AnswersInput, ClockInput, EngInput, Exercise, FeedbackState, OpInput, ProbInput, Section, Subject } from '../features/app/types';
 import EnglishExercisesSection from './exercises/EnglishExercisesSection';
+import LenguaExercisesSection from './exercises/LenguaExercisesSection';
 import MathExercisesSection from './exercises/MathExercisesSection';
 import ExerciseActions from './exercises/ExerciseActions';
 import { answerOption } from '../styles/variants';
@@ -45,6 +46,9 @@ interface ExercisesPageProps {
   generateEngGrammar: () => void;
   generateEngNumbers: () => void;
   generateEngListen: () => void;
+  generateCadaPalabra: () => void;
+  generateCorrigeError: () => void;
+  generateCambiaGenero: () => void;
 }
 
 const ExercisesPage = ({
@@ -78,7 +82,10 @@ const ExercisesPage = ({
   generateEngVocab,
   generateEngGrammar,
   generateEngNumbers,
-  generateEngListen
+  generateEngListen,
+  generateCadaPalabra,
+  generateCorrigeError,
+  generateCambiaGenero
 }: ExercisesPageProps): JSX.Element => {
   const sidebarMates = [
     { id: 'graficos', icon: <BarChart3 />, label: 'Gráficos' }, { id: 'operaciones', icon: <Hash />, label: 'Operaciones' },
@@ -88,7 +95,11 @@ const ExercisesPage = ({
     { id: 'vocab', icon: <List />, label: 'Vocabulary' }, { id: 'grammar', icon: <Type />, label: 'Grammar' },
     { id: 'numbers', icon: <Hash />, label: 'Numbers' }, { id: 'listen', icon: <Volume2 />, label: 'Listen' }
   ];
-  const navItems = subject === 'matematicas' ? sidebarMates : sidebarEnglish;
+  const sidebarLengua = [
+    { id: 'cadaPalabra', icon: <List />, label: 'Cada palabra' }, { id: 'corrigeError', icon: <Type />, label: 'Corrige error' },
+    { id: 'cambiaGenero', icon: <BookOpen />, label: 'Cambia género' }
+  ];
+  const navItems = subject === 'matematicas' ? sidebarMates : subject === 'english' ? sidebarEnglish : sidebarLengua;
 
   return (
     <div className="flex h-screen bg-[#fdfcf0] text-slate-800 overflow-hidden" style={{ fontFamily: "'Borel', cursive" }}>
@@ -98,11 +109,11 @@ const ExercisesPage = ({
           <ArrowLeft size={20} strokeWidth={3} /> Volver a Temas
         </button>
         <h1 className="text-3xl font-bold mb-1 flex items-center gap-2">
-          {subject === 'matematicas' ? <Calculator className="text-yellow-400" /> : <Globe className="text-sky-400" />}
-          {subject === 'matematicas' ? 'Mates 1º' : 'English 1º'}
+          {subject === 'matematicas' ? <Calculator className="text-yellow-400" /> : subject === 'english' ? <Globe className="text-sky-400" /> : <BookOpen className="text-rose-400" />}
+          {subject === 'matematicas' ? 'Mates 1º' : subject === 'english' ? 'English 1º' : 'Lengua 1º'}
         </h1>
         <p className="text-indigo-300 text-sm font-bold uppercase tracking-widest mb-8 px-1">
-          {subject === 'matematicas' ? 'Tema 7' : 'Unit 8'}
+          {subject === 'matematicas' ? 'Tema 7' : 'Tema 8'}
         </p>
         <nav className="flex-1 space-y-3">
           {navItems.map(item => (
@@ -126,7 +137,7 @@ const ExercisesPage = ({
           <div className="mb-6 flex justify-between items-end">
             <div>
               <span className="bg-indigo-100 text-indigo-700 px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
-                {subject === 'matematicas' ? 'TEMA 7' : 'UNIT 8'}
+                {subject === 'english' ? 'UNIT 8' : subject === 'matematicas' ? 'TEMA 7' : 'TEMA 8'}
               </span>
               <h2 className={typography.sectionTitle}>{exercise.name}</h2>
             </div>
@@ -140,6 +151,13 @@ const ExercisesPage = ({
               engInput={engInput}
               setEngInput={setEngInput}
               playAudio={playAudio}
+            />
+
+            <LenguaExercisesSection
+              exercise={exercise}
+              currentSection={currentSection}
+              engInput={engInput}
+              setEngInput={setEngInput}
             />
 
             <MathExercisesSection
@@ -173,6 +191,9 @@ const ExercisesPage = ({
               generateEngGrammar={generateEngGrammar}
               generateEngNumbers={generateEngNumbers}
               generateEngListen={generateEngListen}
+              generateCadaPalabra={generateCadaPalabra}
+              generateCorrigeError={generateCorrigeError}
+              generateCambiaGenero={generateCambiaGenero}
             />
           </div>
         </div>

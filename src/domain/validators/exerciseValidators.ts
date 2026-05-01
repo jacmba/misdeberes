@@ -12,6 +12,9 @@ interface ValidateExerciseInput {
 }
 
 export const getColCount = (grid: boolean[][], c: number): number => grid.reduce((acc, r) => acc + (r[c] ? 1 : 0), 0);
+const normalizeAccentInsensitive = (value: string): string => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const normalizeCaseInsensitive = (value: string): string => normalizeAccentInsensitive(value).trim().toLowerCase();
+const hasSentenceFormat = (value: string): boolean => /^[A-ZÁÉÍÓÚÑÜ].*\.$/.test(value.trim());
 
 export const validateExercise = ({ exercise, userNumbers, grid, answers, opInput, clockInput, probInput, engInput }: ValidateExerciseInput) => {
   let ok = false;
@@ -53,6 +56,24 @@ export const validateExercise = ({ exercise, userNumbers, grid, answers, opInput
   } else if (exercise.type === 'listen') {
     ok = true;
     successMsg = 'Good pronunciation!';
+  } else if (exercise.type === 'cadaPalabra') {
+    ok = exercise.words.every(item => engInput[item.noun] === item.gender);
+    successMsg = '¡Genial! Has colocado todas las palabras. 💪';
+    errorMsg = 'Revisa dónde va cada sustantivo. 🧐';
+  } else if (exercise.type === 'corrigeError') {
+    ok = exercise.questions.every((question, idx) => normalizeCaseInsensitive(engInput[`q${idx}`] ?? '') === normalizeCaseInsensitive(question.correctArticle));
+    successMsg = '¡Muy bien! Has corregido todos los artículos. ✅';
+    errorMsg = 'Hay algún artículo incorrecto. Inténtalo otra vez. 🧐';
+  } else if (exercise.type === 'cambiaGenero') {
+    const userAnswer = (engInput.respuesta ?? '').trim();
+    const formatOk = hasSentenceFormat(userAnswer);
+    const normalizedAnswer = normalizeCaseInsensitive(userAnswer);
+    const isValidVariant = exercise.prompt.validAnswers
+      .map(candidate => normalizeCaseInsensitive(candidate))
+      .includes(normalizedAnswer);
+    ok = formatOk && isValidVariant;
+    successMsg = '¡Excelente! Has cambiado el género correctamente. 🌟';
+    errorMsg = 'Revisa mayúscula inicial, punto final y el cambio de género. 🧐';
   }
 
   return { ok, successMsg, errorMsg };

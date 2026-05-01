@@ -1,6 +1,18 @@
 export type View = 'landing' | 'themes' | 'exercises';
 export type Subject = 'lengua' | 'matematicas' | 'english' | 'science' | null;
-export type Section = 'graficos' | 'operaciones' | 'relojes' | 'problemas' | 'vocab' | 'grammar' | 'numbers' | 'listen' | '';
+export type Section =
+  | 'graficos'
+  | 'operaciones'
+  | 'relojes'
+  | 'problemas'
+  | 'vocab'
+  | 'grammar'
+  | 'numbers'
+  | 'listen'
+  | 'cadaPalabra'
+  | 'corrigeError'
+  | 'cambiaGenero'
+  | '';
 
 export interface QuestionType {
   id: 'most' | 'least' | 'second' | 'third';
@@ -111,6 +123,40 @@ export interface ListenExercise {
   displayEmoji: string | number;
 }
 
+export interface PalabraGeneroItem {
+  noun: string;
+  gender: 'masculino' | 'femenino';
+}
+
+export interface CadaPalabraExercise {
+  type: 'cadaPalabra';
+  name: string;
+  words: PalabraGeneroItem[];
+}
+
+export interface CorrigeErrorQuestion {
+  noun: string;
+  wrongArticle: string;
+  correctArticle: string;
+}
+
+export interface CorrigeErrorExercise {
+  type: 'corrigeError';
+  name: string;
+  questions: CorrigeErrorQuestion[];
+}
+
+export interface CambiaGeneroPrompt {
+  source: string;
+  validAnswers: string[];
+}
+
+export interface CambiaGeneroExercise {
+  type: 'cambiaGenero';
+  name: string;
+  prompt: CambiaGeneroPrompt;
+}
+
 export type Exercise =
   | GraficosExercise
   | OperacionesExercise
@@ -119,7 +165,10 @@ export type Exercise =
   | VocabExercise
   | GrammarExercise
   | NumbersExercise
-  | ListenExercise;
+  | ListenExercise
+  | CadaPalabraExercise
+  | CorrigeErrorExercise
+  | CambiaGeneroExercise;
 
 export interface FeedbackState {
   type: 'success' | 'error';

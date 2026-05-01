@@ -49,7 +49,10 @@ const App = (): JSX.Element | null => {
     generateEngVocab,
     generateEngGrammar,
     generateEngNumbers,
-    generateEngListen
+    generateEngListen,
+    generateCadaPalabra,
+    generateCorrigeError,
+    generateCambiaGenero
   } = useExerciseController({
     view,
     currentSection,
@@ -132,6 +135,9 @@ const App = (): JSX.Element | null => {
       generateEngGrammar={generateEngGrammar}
       generateEngNumbers={generateEngNumbers}
       generateEngListen={generateEngListen}
+      generateCadaPalabra={generateCadaPalabra}
+      generateCorrigeError={generateCorrigeError}
+      generateCambiaGenero={generateCambiaGenero}
     />
   );
 };

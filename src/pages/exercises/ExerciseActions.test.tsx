@@ -15,7 +15,10 @@ const baseProps = {
   generateEngVocab: vi.fn(),
   generateEngGrammar: vi.fn(),
   generateEngNumbers: vi.fn(),
-  generateEngListen: vi.fn()
+  generateEngListen: vi.fn(),
+  generateCadaPalabra: vi.fn(),
+  generateCorrigeError: vi.fn(),
+  generateCambiaGenero: vi.fn()
 };
 
 describe('ExerciseActions', () => {
@@ -40,5 +43,11 @@ describe('ExerciseActions', () => {
   it('renders success feedback banner', () => {
     render(<ExerciseActions {...baseProps} feedback={{ type: 'success', message: 'Perfecto' }} />);
     expect(screen.getByText('Perfecto')).toBeInTheDocument();
+  });
+
+  it('runs lengua generator for completed cada palabra section', () => {
+    render(<ExerciseActions {...baseProps} subject="lengua" currentSection="cadaPalabra" isCompleted />);
+    fireEvent.click(screen.getByRole('button', { name: /Siguiente/i }));
+    expect(baseProps.generateCadaPalabra).toHaveBeenCalledTimes(1);
   });
 });
