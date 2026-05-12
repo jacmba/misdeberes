@@ -10,7 +10,11 @@ import {
   generateGraficosExercise,
   generateOperacionesExercise,
   generateProblemasExercise,
-  generateRelojesExercise
+  generateRelojesExercise,
+  generateSciHowTravelExercise,
+  generateSciMatrixExercise,
+  generateSciTransportExercise,
+  generateSciWhereExercise
 } from '../domain/generators/exerciseGenerators';
 import { validateExercise } from '../domain/validators/exerciseValidators';
 import type { AnswersInput, ClockInput, EngInput, Exercise, FeedbackState, OpInput, ProbInput, Section, View } from '../features/app/types';
@@ -27,6 +31,7 @@ interface UseExerciseControllerParams {
   clockInput: ClockInput;
   probInput: ProbInput;
   engInput: EngInput;
+  featureMatrix: boolean[][];
   setExercise: (value: Exercise | null) => void;
   setFeedback: (value: FeedbackState | null) => void;
   setIsCompleted: (value: boolean) => void;
@@ -37,6 +42,7 @@ interface UseExerciseControllerParams {
   setClockInput: (value: ClockInput) => void;
   setProbInput: (value: ProbInput) => void;
   setEngInput: (value: EngInput) => void;
+  setFeatureMatrix: (value: boolean[][] | ((prev: boolean[][]) => boolean[][])) => void;
 }
 
 const useExerciseController = ({
@@ -60,7 +66,9 @@ const useExerciseController = ({
   setOpInput,
   setClockInput,
   setProbInput,
-  setEngInput
+  setEngInput,
+  featureMatrix,
+  setFeatureMatrix
 }: UseExerciseControllerParams) => {
   const playAudio = (text: string): void => {
     if ('speechSynthesis' in window) {
@@ -129,6 +137,39 @@ const useExerciseController = ({
     setIsCompleted(false);
   }, [setExercise, setFeedback, setIsCompleted]);
 
+  const generateSciTransport = useCallback(() => {
+    setExercise(generateSciTransportExercise());
+    setEngInput({});
+    setFeatureMatrix([]);
+    setFeedback(null);
+    setIsCompleted(false);
+  }, [setEngInput, setExercise, setFeatureMatrix, setFeedback, setIsCompleted]);
+
+  const generateSciHowTravel = useCallback(() => {
+    setExercise(generateSciHowTravelExercise());
+    setEngInput({});
+    setFeatureMatrix([]);
+    setFeedback(null);
+    setIsCompleted(false);
+  }, [setEngInput, setExercise, setFeatureMatrix, setFeedback, setIsCompleted]);
+
+  const generateSciWhere = useCallback(() => {
+    setExercise(generateSciWhereExercise());
+    setEngInput({});
+    setFeatureMatrix([]);
+    setFeedback(null);
+    setIsCompleted(false);
+  }, [setEngInput, setExercise, setFeatureMatrix, setFeedback, setIsCompleted]);
+
+  const generateSciMatrix = useCallback(() => {
+    const next = generateSciMatrixExercise();
+    setExercise(next);
+    setEngInput({});
+    setFeatureMatrix(next.solution.map(row => row.map(() => false)));
+    setFeedback(null);
+    setIsCompleted(false);
+  }, [setEngInput, setExercise, setFeatureMatrix, setFeedback, setIsCompleted]);
+
   const generateCadaPalabra = useCallback(() => {
     setExercise(generateCadaPalabraExercise());
     setEngInput({});
@@ -164,7 +205,11 @@ const useExerciseController = ({
       listen: 'listen',
       cadaPalabra: 'cadaPalabra',
       corrigeError: 'corrigeError',
-      cambiaGenero: 'cambiaGenero'
+      cambiaGenero: 'cambiaGenero',
+      sciTransport: 'sciTransport',
+      sciHowTravel: 'sciHowTravel',
+      sciWhere: 'sciWhere',
+      sciMatrix: 'sciMatrix'
     };
 
     const targetType = sectionTypeMap[currentSection as Exclude<Section, ''>];
@@ -182,11 +227,15 @@ const useExerciseController = ({
     if (currentSection === 'cadaPalabra') generateCadaPalabra();
     if (currentSection === 'corrigeError') generateCorrigeError();
     if (currentSection === 'cambiaGenero') generateCambiaGenero();
-  }, [view, currentSection, exercise, generateGraficos, generateOperaciones, generateRelojes, generateProblemas, generateEngVocab, generateEngGrammar, generateEngNumbers, generateEngListen, generateCadaPalabra, generateCorrigeError, generateCambiaGenero]);
+    if (currentSection === 'sciTransport') generateSciTransport();
+    if (currentSection === 'sciHowTravel') generateSciHowTravel();
+    if (currentSection === 'sciWhere') generateSciWhere();
+    if (currentSection === 'sciMatrix') generateSciMatrix();
+  }, [view, currentSection, exercise, generateGraficos, generateOperaciones, generateRelojes, generateProblemas, generateEngVocab, generateEngGrammar, generateEngNumbers, generateEngListen, generateCadaPalabra, generateCorrigeError, generateCambiaGenero, generateSciTransport, generateSciHowTravel, generateSciWhere, generateSciMatrix]);
 
   const checkSolution = (): void => {
     if (!exercise) return;
-    const { ok, successMsg, errorMsg } = validateExercise({ exercise, userNumbers, grid, answers, opInput, clockInput, probInput, engInput });
+    const { ok, successMsg, errorMsg } = validateExercise({ exercise, userNumbers, grid, answers, opInput, clockInput, probInput, engInput, featureMatrix });
     if (ok) {
       setFeedback({ type: 'success', message: successMsg });
       setIsCompleted(true);
@@ -204,10 +253,18 @@ const useExerciseController = ({
     );
   };
 
+  const handleMatrixCellClick = (row: number, col: number): void => {
+    if (isCompleted || exercise?.type !== 'sciMatrix') return;
+    setFeatureMatrix(prev =>
+      prev.map((r, rIdx) => (rIdx === row ? r.map((cell, cIdx) => (cIdx === col ? !cell : cell)) : r))
+    );
+  };
+
   return {
     playAudio,
     checkSolution,
     handleCellClick,
+    handleMatrixCellClick,
     generateGraficos,
     generateOperaciones,
     generateRelojes,
@@ -218,7 +275,11 @@ const useExerciseController = ({
     generateEngListen,
     generateCadaPalabra,
     generateCorrigeError,
-    generateCambiaGenero
+    generateCambiaGenero,
+    generateSciTransport,
+    generateSciHowTravel,
+    generateSciWhere,
+    generateSciMatrix
   };
 };
 

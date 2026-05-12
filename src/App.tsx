@@ -19,7 +19,8 @@ const App = (): JSX.Element | null => {
     opInput,
     clockInput,
     probInput,
-    engInput
+    engInput,
+    featureMatrix
   } = useAppSelector(state => state.app);
 
   const {
@@ -35,13 +36,15 @@ const App = (): JSX.Element | null => {
     setOpInput,
     setClockInput,
     setProbInput,
-    setEngInput
+    setEngInput,
+    setFeatureMatrix
   } = useAppActions();
 
   const {
     playAudio,
     checkSolution,
     handleCellClick,
+    handleMatrixCellClick,
     generateGraficos,
     generateOperaciones,
     generateRelojes,
@@ -52,7 +55,11 @@ const App = (): JSX.Element | null => {
     generateEngListen,
     generateCadaPalabra,
     generateCorrigeError,
-    generateCambiaGenero
+    generateCambiaGenero,
+    generateSciTransport,
+    generateSciHowTravel,
+    generateSciWhere,
+    generateSciMatrix
   } = useExerciseController({
     view,
     currentSection,
@@ -65,6 +72,7 @@ const App = (): JSX.Element | null => {
     clockInput,
     probInput,
     engInput,
+    featureMatrix,
     setExercise,
     setFeedback,
     setIsCompleted,
@@ -74,7 +82,8 @@ const App = (): JSX.Element | null => {
     setOpInput,
     setClockInput: value => setClockInput(value),
     setProbInput,
-    setEngInput
+    setEngInput,
+    setFeatureMatrix
   });
 
   if (view === 'landing') {
@@ -116,6 +125,7 @@ const App = (): JSX.Element | null => {
       clockInput={clockInput}
       probInput={probInput}
       engInput={engInput}
+      featureMatrix={featureMatrix}
       setView={setView}
       setCurrentSection={setCurrentSection}
       setUserNumbers={setUserNumbers}
@@ -125,6 +135,7 @@ const App = (): JSX.Element | null => {
       setProbInput={setProbInput}
       setEngInput={setEngInput}
       handleCellClick={handleCellClick}
+      handleMatrixCellClick={handleMatrixCellClick}
       playAudio={playAudio}
       checkSolution={checkSolution}
       generateGraficos={generateGraficos}
@@ -138,6 +149,10 @@ const App = (): JSX.Element | null => {
       generateCadaPalabra={generateCadaPalabra}
       generateCorrigeError={generateCorrigeError}
       generateCambiaGenero={generateCambiaGenero}
+      generateSciTransport={generateSciTransport}
+      generateSciHowTravel={generateSciHowTravel}
+      generateSciWhere={generateSciWhere}
+      generateSciMatrix={generateSciMatrix}
     />
   );
 };

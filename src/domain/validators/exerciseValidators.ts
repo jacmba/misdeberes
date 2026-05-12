@@ -9,6 +9,7 @@ interface ValidateExerciseInput {
   clockInput: ClockInput;
   probInput: ProbInput;
   engInput: EngInput;
+  featureMatrix: boolean[][];
 }
 
 export const getColCount = (grid: boolean[][], c: number): number => grid.reduce((acc, r) => acc + (r[c] ? 1 : 0), 0);
@@ -16,7 +17,7 @@ const normalizeAccentInsensitive = (value: string): string => value.normalize('N
 const normalizeCaseInsensitive = (value: string): string => normalizeAccentInsensitive(value).trim().toLowerCase();
 const hasSentenceFormat = (value: string): boolean => /^[A-ZÁÉÍÓÚÑÜ].*\.$/.test(value.trim());
 
-export const validateExercise = ({ exercise, userNumbers, grid, answers, opInput, clockInput, probInput, engInput }: ValidateExerciseInput) => {
+export const validateExercise = ({ exercise, userNumbers, grid, answers, opInput, clockInput, probInput, engInput, featureMatrix }: ValidateExerciseInput) => {
   let ok = false;
   let successMsg = '¡Perfecto! Todo está correcto. 🌟';
   let errorMsg = 'Hay algún error. ¡Revísalo bien! 🧐';
@@ -74,6 +75,18 @@ export const validateExercise = ({ exercise, userNumbers, grid, answers, opInput
     ok = formatOk && isValidVariant;
     successMsg = '¡Excelente! Has cambiado el género correctamente. 🌟';
     errorMsg = 'Revisa mayúscula inicial, punto final y el cambio de género. 🧐';
+  } else if (exercise.type === 'sciTransport' || exercise.type === 'sciHowTravel' || exercise.type === 'sciWhere') {
+    ok = exercise.questions.every((q, i) => engInput[`q${i}`] === q.options.find(o => o.isCorrect)?.label);
+    successMsg = 'Great science work! 🧪';
+    errorMsg = 'Check your answers! 🧐';
+  } else if (exercise.type === 'sciMatrix') {
+    const rows = exercise.solution.length;
+    const cols = exercise.solution[0]?.length ?? 0;
+    const dimsOk = featureMatrix.length === rows && featureMatrix.every((r, ri) => r.length === cols && ri < rows);
+    const cellsOk = dimsOk && exercise.solution.every((row, ri) => row.every((cell, ci) => featureMatrix[ri][ci] === cell));
+    ok = dimsOk && cellsOk;
+    successMsg = 'Perfect matrix! 🌟';
+    errorMsg = 'Some ticks are wrong. Try again! 🧐';
   }
 
   return { ok, successMsg, errorMsg };

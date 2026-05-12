@@ -12,6 +12,10 @@ export type Section =
   | 'cadaPalabra'
   | 'corrigeError'
   | 'cambiaGenero'
+  | 'sciTransport'
+  | 'sciHowTravel'
+  | 'sciWhere'
+  | 'sciMatrix'
   | '';
 
 export interface QuestionType {
@@ -157,6 +161,38 @@ export interface CambiaGeneroExercise {
   prompt: CambiaGeneroPrompt;
 }
 
+export interface ScienceChoiceQuestion {
+  prompt: string;
+  emoji: string;
+  options: GrammarOption[];
+}
+
+export interface ScienceTransportExercise {
+  type: 'sciTransport';
+  name: string;
+  questions: ScienceChoiceQuestion[];
+}
+
+export interface ScienceHowTravelExercise {
+  type: 'sciHowTravel';
+  name: string;
+  questions: ScienceChoiceQuestion[];
+}
+
+export interface ScienceWhereExercise {
+  type: 'sciWhere';
+  name: string;
+  questions: ScienceChoiceQuestion[];
+}
+
+export interface ScienceMatrixExercise {
+  type: 'sciMatrix';
+  name: string;
+  rowLabels: string[];
+  columnLabels: string[];
+  solution: boolean[][];
+}
+
 export type Exercise =
   | GraficosExercise
   | OperacionesExercise
@@ -168,7 +204,11 @@ export type Exercise =
   | ListenExercise
   | CadaPalabraExercise
   | CorrigeErrorExercise
-  | CambiaGeneroExercise;
+  | CambiaGeneroExercise
+  | ScienceTransportExercise
+  | ScienceHowTravelExercise
+  | ScienceWhereExercise
+  | ScienceMatrixExercise;
 
 export interface FeedbackState {
   type: 'success' | 'error';
@@ -223,4 +263,5 @@ export interface AppState {
   clockInput: ClockInput;
   probInput: ProbInput;
   engInput: EngInput;
+  featureMatrix: boolean[][];
 }

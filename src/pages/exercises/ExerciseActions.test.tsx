@@ -18,7 +18,11 @@ const baseProps = {
   generateEngListen: vi.fn(),
   generateCadaPalabra: vi.fn(),
   generateCorrigeError: vi.fn(),
-  generateCambiaGenero: vi.fn()
+  generateCambiaGenero: vi.fn(),
+  generateSciTransport: vi.fn(),
+  generateSciHowTravel: vi.fn(),
+  generateSciWhere: vi.fn(),
+  generateSciMatrix: vi.fn()
 };
 
 describe('ExerciseActions', () => {
@@ -49,5 +53,11 @@ describe('ExerciseActions', () => {
     render(<ExerciseActions {...baseProps} subject="lengua" currentSection="cadaPalabra" isCompleted />);
     fireEvent.click(screen.getByRole('button', { name: /Siguiente/i }));
     expect(baseProps.generateCadaPalabra).toHaveBeenCalledTimes(1);
+  });
+
+  it('runs science generator for completed transport section', () => {
+    render(<ExerciseActions {...baseProps} subject="science" currentSection="sciTransport" isCompleted />);
+    fireEvent.click(screen.getByRole('button', { name: /Siguiente/i }));
+    expect(baseProps.generateSciTransport).toHaveBeenCalledTimes(1);
   });
 });

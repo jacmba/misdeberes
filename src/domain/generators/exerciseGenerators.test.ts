@@ -10,7 +10,11 @@ import {
   generateGraficosExercise,
   generateOperacionesExercise,
   generateProblemasExercise,
-  generateRelojesExercise
+  generateRelojesExercise,
+  generateSciHowTravelExercise,
+  generateSciMatrixExercise,
+  generateSciTransportExercise,
+  generateSciWhereExercise
 } from './exerciseGenerators';
 
 describe('exercise generators', () => {
@@ -96,5 +100,27 @@ describe('exercise generators', () => {
     expect(exercise.type).toBe('cambiaGenero');
     expect(exercise.prompt.source.length).toBeGreaterThan(0);
     expect(exercise.prompt.validAnswers.length).toBeGreaterThan(0);
+  });
+
+  it('generates science unit exercises with stable shapes', () => {
+    const transport = generateSciTransportExercise();
+    expect(transport.type).toBe('sciTransport');
+    expect(transport.questions).toHaveLength(6);
+    expect(transport.questions.every(q => q.options.some(o => o.isCorrect))).toBe(true);
+
+    const how = generateSciHowTravelExercise();
+    expect(how.type).toBe('sciHowTravel');
+    expect(how.questions).toHaveLength(6);
+
+    const where = generateSciWhereExercise();
+    expect(where.type).toBe('sciWhere');
+    expect(where.questions).toHaveLength(4);
+
+    const matrix = generateSciMatrixExercise();
+    expect(matrix.type).toBe('sciMatrix');
+    expect(matrix.rowLabels).toHaveLength(6);
+    expect(matrix.columnLabels).toHaveLength(8);
+    expect(matrix.solution).toHaveLength(6);
+    expect(matrix.solution.every(row => row.length === 8)).toBe(true);
   });
 });

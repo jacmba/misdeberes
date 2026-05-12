@@ -20,6 +20,10 @@ interface ExerciseActionsProps {
   generateCadaPalabra: () => void;
   generateCorrigeError: () => void;
   generateCambiaGenero: () => void;
+  generateSciTransport: () => void;
+  generateSciHowTravel: () => void;
+  generateSciWhere: () => void;
+  generateSciMatrix: () => void;
 }
 
 const ExerciseActions = ({
@@ -38,7 +42,11 @@ const ExerciseActions = ({
   generateEngListen,
   generateCadaPalabra,
   generateCorrigeError,
-  generateCambiaGenero
+  generateCambiaGenero,
+  generateSciTransport,
+  generateSciHowTravel,
+  generateSciWhere,
+  generateSciMatrix
 }: ExerciseActionsProps): JSX.Element => (
   <>
     {feedback && (
@@ -62,13 +70,17 @@ const ExerciseActions = ({
             } else if (subject === 'english') {
               if (currentSection === 'vocab') generateEngVocab();
               else if (currentSection === 'grammar') generateEngGrammar();
-              else generateEngNumbers();
-            } else if (currentSection === 'cadaPalabra') {
-              generateCadaPalabra();
-            } else if (currentSection === 'corrigeError') {
-              generateCorrigeError();
-            } else {
-              generateCambiaGenero();
+              else if (currentSection === 'numbers') generateEngNumbers();
+              else generateEngListen();
+            } else if (subject === 'lengua') {
+              if (currentSection === 'cadaPalabra') generateCadaPalabra();
+              else if (currentSection === 'corrigeError') generateCorrigeError();
+              else generateCambiaGenero();
+            } else if (subject === 'science') {
+              if (currentSection === 'sciTransport') generateSciTransport();
+              else if (currentSection === 'sciHowTravel') generateSciHowTravel();
+              else if (currentSection === 'sciWhere') generateSciWhere();
+              else generateSciMatrix();
             }
           }} className={cn(actionButton({ intent: 'success', italic: true }), 'text-5xl')}>¡Siguiente! <ChevronRight strokeWidth={5} size={64} /></button>
         )

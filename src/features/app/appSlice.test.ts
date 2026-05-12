@@ -6,6 +6,7 @@ import reducer, {
   setEngInput,
   setExercise,
   setFeedback,
+  setFeatureMatrix,
   setIsCompleted,
   setOpInput,
   setProbInput,
@@ -23,6 +24,7 @@ describe('appSlice', () => {
     expect(initial.subject).toBeNull();
     expect(initial.grid).toHaveLength(8);
     expect(initial.grid[0]).toHaveLength(4);
+    expect(initial.featureMatrix).toEqual([]);
     expect(initial.feedback).toBeNull();
   });
 
@@ -51,6 +53,7 @@ describe('appSlice', () => {
     state = reducer(state, setClockInput({ hour: '3', minType: '30', beforeH: 2, beforeM: 30, afterH: 4, afterM: 30 }));
     state = reducer(state, setProbInput({ val1: '1', val2: '2', averiguo: 'total', accion: 'sumar', tens: '0', units: '3', carry: '', solucion: '3' }));
     state = reducer(state, setEngInput({ q0: 'two' }));
+    state = reducer(state, setFeatureMatrix([[true, false], [false, true]]));
 
     expect(state.exercise?.type).toBe('listen');
     expect(state.userNumbers).toEqual(['1', '2', '3', '4']);
@@ -59,5 +62,6 @@ describe('appSlice', () => {
     expect(state.clockInput.minType).toBe('30');
     expect(state.probInput.solucion).toBe('3');
     expect(state.engInput.q0).toBe('two');
+    expect(state.featureMatrix).toEqual([[true, false], [false, true]]);
   });
 });

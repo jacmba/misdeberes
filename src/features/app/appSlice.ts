@@ -26,7 +26,8 @@ const initialState: AppState = {
   opInput: { tens: '', units: '', carry: '' },
   clockInput: { hour: '', minType: '', beforeH: 12, beforeM: 0, afterH: 12, afterM: 0 },
   probInput: { val1: '', val2: '', averiguo: '', accion: '', tens: '', units: '', carry: '', solucion: '' },
-  engInput: {}
+  engInput: {},
+  featureMatrix: []
 };
 
 const appSlice = createSlice({
@@ -45,7 +46,8 @@ const appSlice = createSlice({
     setOpInput(state, action: PayloadAction<OpInput>) { state.opInput = action.payload; },
     setClockInput(state, action: PayloadAction<ClockInput>) { state.clockInput = action.payload; },
     setProbInput(state, action: PayloadAction<ProbInput>) { state.probInput = action.payload; },
-    setEngInput(state, action: PayloadAction<EngInput>) { state.engInput = action.payload; }
+    setEngInput(state, action: PayloadAction<EngInput>) { state.engInput = action.payload; },
+    setFeatureMatrix(state, action: PayloadAction<boolean[][]>) { state.featureMatrix = action.payload; }
   }
 });
 
@@ -62,7 +64,8 @@ export const {
   setOpInput,
   setClockInput,
   setProbInput,
-  setEngInput
+  setEngInput,
+  setFeatureMatrix
 } = appSlice.actions;
 
 export default appSlice.reducer;

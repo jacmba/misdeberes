@@ -46,6 +46,16 @@ vi.mock('../domain/generators/exerciseGenerators', () => ({
     type: 'cambiaGenero',
     name: 'Cambia el género',
     prompt: { source: 'El niño está contento.', validAnswers: ['La niña está contenta.'] }
+  })),
+  generateSciTransportExercise: vi.fn(() => ({ type: 'sciTransport', name: 'Transport', questions: [] })),
+  generateSciHowTravelExercise: vi.fn(() => ({ type: 'sciHowTravel', name: 'How', questions: [] })),
+  generateSciWhereExercise: vi.fn(() => ({ type: 'sciWhere', name: 'Where', questions: [] })),
+  generateSciMatrixExercise: vi.fn(() => ({
+    type: 'sciMatrix',
+    name: 'Matrix',
+    rowLabels: ['A'],
+    columnLabels: ['x'],
+    solution: [[false]]
   }))
 }));
 
@@ -65,6 +75,7 @@ const makeParams = () => ({
   clockInput: { hour: '', minType: '', beforeH: 12, beforeM: 0, afterH: 12, afterM: 0 },
   probInput: { val1: '', val2: '', averiguo: '', accion: '', tens: '', units: '', carry: '', solucion: '' },
   engInput: {},
+  featureMatrix: [],
   setExercise: vi.fn(),
   setFeedback: vi.fn(),
   setIsCompleted: vi.fn(),
@@ -74,7 +85,8 @@ const makeParams = () => ({
   setOpInput: vi.fn(),
   setClockInput: vi.fn(),
   setProbInput: vi.fn(),
-  setEngInput: vi.fn()
+  setEngInput: vi.fn(),
+  setFeatureMatrix: vi.fn()
 });
 
 describe('useExerciseController', () => {
@@ -112,5 +124,27 @@ describe('useExerciseController', () => {
     const updateFn = params.setGrid.mock.calls[1][0] as (value: boolean[][]) => boolean[][];
     const next = updateFn(Array(8).fill(null).map(() => Array(4).fill(false)));
     expect(next[0][1]).toBe(true);
+  });
+
+  it('handleMatrixCellClick toggles feature matrix when sciMatrix exercise is active', () => {
+    const params = makeParams();
+    const { result } = renderHook(() =>
+      useExerciseController({
+        ...params,
+        currentSection: 'sciMatrix',
+        exercise: {
+          type: 'sciMatrix',
+          name: 'Matrix',
+          rowLabels: ['A'],
+          columnLabels: ['x'],
+          solution: [[false]]
+        },
+        featureMatrix: [[false]]
+      })
+    );
+    result.current.handleMatrixCellClick(0, 0);
+    const updateFn = params.setFeatureMatrix.mock.calls[0][0] as (value: boolean[][]) => boolean[][];
+    const next = updateFn([[false]]);
+    expect(next[0][0]).toBe(true);
   });
 });

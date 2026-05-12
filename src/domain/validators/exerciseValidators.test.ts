@@ -9,7 +9,8 @@ const baseInput = {
   opInput: { tens: '', units: '', carry: '' },
   clockInput: { hour: '', minType: '', beforeH: 12, beforeM: 0, afterH: 12, afterM: 0 },
   probInput: { val1: '', val2: '', averiguo: '', accion: '', tens: '', units: '', carry: '', solucion: '' },
-  engInput: {}
+  engInput: {},
+  featureMatrix: []
 };
 
 describe('validateExercise', () => {
@@ -211,5 +212,37 @@ describe('validateExercise', () => {
     expect(ok.ok).toBe(true);
     expect(wrongCase.ok).toBe(false);
     expect(wrongPunctuation.ok).toBe(false);
+  });
+
+  it('validates science transport with correct radio labels', () => {
+    const exercise: Exercise = {
+      type: 'sciTransport',
+      name: 'Transport',
+      questions: [
+        { prompt: 'Bus?', emoji: '🚌', options: [{ label: 'Collective', isCorrect: true }, { label: 'Individual', isCorrect: false }] }
+      ]
+    };
+    expect(validateExercise({ ...baseInput, exercise, engInput: { q0: 'Collective' } }).ok).toBe(true);
+    expect(validateExercise({ ...baseInput, exercise, engInput: { q0: 'Individual' } }).ok).toBe(false);
+  });
+
+  it('validates science matrix against featureMatrix', () => {
+    const solution = [
+      [true, false],
+      [false, true]
+    ];
+    const exercise: Exercise = {
+      type: 'sciMatrix',
+      name: 'Matrix',
+      rowLabels: ['A', 'B'],
+      columnLabels: ['c1', 'c2'],
+      solution
+    };
+    const ok = validateExercise({ ...baseInput, exercise, featureMatrix: solution.map(row => [...row]) });
+    const bad = validateExercise({ ...baseInput, exercise, featureMatrix: [[false, false], [false, false]] });
+    const wrongDims = validateExercise({ ...baseInput, exercise, featureMatrix: [[true]] });
+    expect(ok.ok).toBe(true);
+    expect(bad.ok).toBe(false);
+    expect(wrongDims.ok).toBe(false);
   });
 });

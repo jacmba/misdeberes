@@ -22,3 +22,12 @@ test('user can open lengua theme 8 from landing', async ({ page }) => {
   await page.getByRole('button', { name: /Tema 8/i }).click();
   await expect(page.getByText('Cada palabra en su lugar')).toBeVisible();
 });
+
+test('user can open science unit 8 from landing', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Science' }).click();
+  await expect(page.getByText('Science')).toBeVisible();
+
+  await page.getByRole('button', { name: /Unit 8/i }).click();
+  await expect(page.getByRole('heading', { name: 'Collective or individual?' })).toBeVisible();
+});

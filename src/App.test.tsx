@@ -56,4 +56,18 @@ describe('App integration flow', () => {
     expect(screen.getByText('Cada palabra')).toBeInTheDocument();
     expect(screen.getByText('Cada palabra en su lugar')).toBeInTheDocument();
   });
+
+  it('opens science unit 8 and shows first science section', async () => {
+    renderApp();
+    fireEvent.click(screen.getByRole('button', { name: /Science/i }));
+    expect(await screen.findByText('Science')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /Unit 8/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Comprobar/i })).toBeInTheDocument();
+    });
+    expect(screen.getByText('Transport')).toBeInTheDocument();
+    expect(screen.getByText('Collective or individual?')).toBeInTheDocument();
+  });
 });

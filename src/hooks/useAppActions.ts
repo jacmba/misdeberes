@@ -4,6 +4,7 @@ import {
   setCurrentSection as setCurrentSectionAction,
   setEngInput as setEngInputAction,
   setExercise as setExerciseAction,
+  setFeatureMatrix as setFeatureMatrixAction,
   setFeedback as setFeedbackAction,
   setGrid as setGridAction,
   setIsCompleted as setIsCompletedAction,
@@ -18,7 +19,7 @@ import { useAppDispatch, useAppSelector } from '../app/store';
 
 const useAppActions = () => {
   const dispatch = useAppDispatch();
-  const { grid, clockInput } = useAppSelector(state => state.app);
+  const { grid, clockInput, featureMatrix } = useAppSelector(state => state.app);
 
   const setView = (value: View) => dispatch(setViewAction(value));
   const setSubject = (value: Subject) => dispatch(setSubjectAction(value));
@@ -33,6 +34,8 @@ const useAppActions = () => {
   const setClockInput = (value: ClockInput | ((prev: ClockInput) => ClockInput)) => dispatch(setClockInputAction(typeof value === 'function' ? value(clockInput) : value));
   const setProbInput = (value: ProbInput) => dispatch(setProbInputAction(value));
   const setEngInput = (value: EngInput) => dispatch(setEngInputAction(value));
+  const setFeatureMatrix = (value: boolean[][] | ((prev: boolean[][]) => boolean[][])) =>
+    dispatch(setFeatureMatrixAction(typeof value === 'function' ? value(featureMatrix) : value));
 
   return {
     setView,
@@ -47,7 +50,8 @@ const useAppActions = () => {
     setOpInput,
     setClockInput,
     setProbInput,
-    setEngInput
+    setEngInput,
+    setFeatureMatrix
   };
 };
 

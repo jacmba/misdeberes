@@ -47,7 +47,10 @@ const ThemesPage = ({ subject, onBack, onSelectSection }: ThemesPageProps): JSX.
   } else if (subject === 'science') {
     subjectTitle = 'Science';
     Icon = Microscope;
-    themesData = [{ id: 't1', title: 'Unit actual', desc: 'Próximamente...', enabled: false }];
+    themesData = [
+      { id: 'unit7', title: 'Unit 7', desc: 'Review...', enabled: false },
+      { id: 'unit8', title: 'Unit 8', desc: 'We love travelling (Transport)', enabled: true, firstSection: 'sciTransport' }
+    ];
   }
 
   return (

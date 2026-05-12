@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.32% </span>
+                <span class="strong">90.9% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/31</span>
+                <span class='fraction'>30/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>2/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">81.25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>12/15</span>
+                <span class='fraction'>13/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>17/17</span>
+                <span class='fraction'>19/19</span>
             </div>
         
             
@@ -117,7 +117,12 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -136,24 +141,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">51x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,6 +185,7 @@
   setCurrentSection as setCurrentSectionAction,
   setEngInput as setEngInputAction,
   setExercise as setExerciseAction,
+  setFeatureMatrix as setFeatureMatrixAction,
   setFeedback as setFeedbackAction,
   setGrid as setGridAction,
   setIsCompleted as setIsCompletedAction,
@@ -191,7 +200,7 @@ import { useAppDispatch, useAppSelector } from '../app/store';
 &nbsp;
 const useAppActions = () =&gt; {
   const dispatch = useAppDispatch();
-  const { grid, clockInput } = useAppSelector(state =&gt; state.app);
+  const { grid, clockInput, featureMatrix } = useAppSelector(state =&gt; state.app);
 &nbsp;
   const setView = (value: View) =&gt; dispatch(setViewAction(value));
   const setSubject = (value: Subject) =&gt; dispatch(setSubjectAction(value));
@@ -206,6 +215,8 @@ const useAppActions = () =&gt; {
   const <span class="fstat-no" title="function not covered" >setClockInput = (v</span>alue: ClockInput | ((prev: ClockInput) =&gt; ClockInput)) =&gt; <span class="cstat-no" title="statement not covered" >dispatch(setClockInputAction(typeof value === 'function' ? value(clockInput) : value));</span>
   const <span class="fstat-no" title="function not covered" >setProbInput = (v</span>alue: ProbInput) =&gt; <span class="cstat-no" title="statement not covered" >dispatch(setProbInputAction(value));</span>
   const setEngInput = (value: EngInput) =&gt; dispatch(setEngInputAction(value));
+  const setFeatureMatrix = (value: boolean[][] | ((prev: boolean[][]) =&gt; boolean[][])) =&gt;
+    dispatch(setFeatureMatrixAction(typeof value === 'function' ? <span class="branch-0 cbranch-no" title="branch not covered" >value(featureMatrix) </span>: value));
 &nbsp;
   return {
     setView,
@@ -220,7 +231,8 @@ const useAppActions = () =&gt; {
     setOpInput,
     setClockInput,
     setProbInput,
-    setEngInput
+    setEngInput,
+    setFeatureMatrix
   };
 };
 &nbsp;
@@ -232,7 +244,7 @@ export default useAppActions;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-05-01T09:51:55.557Z
+                at 2026-05-12T18:56:14.158Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

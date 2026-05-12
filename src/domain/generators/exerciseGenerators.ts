@@ -1,6 +1,14 @@
 import { ANIMAL_GRAMMAR_DATA, ENG_NUMBERS, ENGLISH_BODY_PARTS } from '../data/englishData';
 import { CAMBIA_GENERO_PROMPTS, CORRIGE_ERROR_TEMPLATES, LENGUA_NOUNS } from '../data/lenguaData';
 import { OTHER_NAMES, PROB_ITEMS, QUESTION_TYPES, THEMES_GRAFICOS } from '../data/mathData';
+import {
+  SCIENCE_HOW_TRAVEL_QUESTIONS,
+  SCIENCE_MATRIX_COLUMN_LABELS,
+  SCIENCE_MATRIX_ROW_LABELS,
+  SCIENCE_MATRIX_SOLUTION,
+  SCIENCE_TRANSPORT_QUESTIONS,
+  SCIENCE_WHERE_QUESTIONS
+} from '../data/scienceData';
 import type {
   CambiaGeneroExercise,
   CadaPalabraExercise,
@@ -12,6 +20,11 @@ import type {
   OperacionesExercise,
   ProblemasExercise,
   RelojesExercise,
+  ScienceChoiceQuestion,
+  ScienceHowTravelExercise,
+  ScienceMatrixExercise,
+  ScienceTransportExercise,
+  ScienceWhereExercise,
   VocabExercise
 } from '../../features/app/types';
 
@@ -181,3 +194,34 @@ export const generateCambiaGeneroExercise = (): CambiaGeneroExercise => {
   const prompt = CAMBIA_GENERO_PROMPTS[Math.floor(Math.random() * CAMBIA_GENERO_PROMPTS.length)];
   return { type: 'cambiaGenero', name: 'Cambia el género', prompt };
 };
+
+const shuffleScienceOptions = (question: ScienceChoiceQuestion): ScienceChoiceQuestion => ({
+  ...question,
+  options: [...question.options].sort(() => 0.5 - Math.random())
+});
+
+export const generateSciTransportExercise = (): ScienceTransportExercise => ({
+  type: 'sciTransport',
+  name: 'Collective or individual?',
+  questions: SCIENCE_TRANSPORT_QUESTIONS.map(shuffleScienceOptions)
+});
+
+export const generateSciHowTravelExercise = (): ScienceHowTravelExercise => ({
+  type: 'sciHowTravel',
+  name: 'How do we travel?',
+  questions: SCIENCE_HOW_TRAVEL_QUESTIONS.map(shuffleScienceOptions)
+});
+
+export const generateSciWhereExercise = (): ScienceWhereExercise => ({
+  type: 'sciWhere',
+  name: 'Where do we take transport?',
+  questions: SCIENCE_WHERE_QUESTIONS.map(shuffleScienceOptions)
+});
+
+export const generateSciMatrixExercise = (): ScienceMatrixExercise => ({
+  type: 'sciMatrix',
+  name: 'Transport features',
+  rowLabels: [...SCIENCE_MATRIX_ROW_LABELS],
+  columnLabels: [...SCIENCE_MATRIX_COLUMN_LABELS],
+  solution: SCIENCE_MATRIX_SOLUTION.map(row => [...row])
+});

@@ -2,13 +2,15 @@ import {
   BarChart3, Calculator,
   Hash, Clock,
   ArrowLeft, BookOpen, Globe,
-  Volume2, List, Type
+  Volume2, List, Type,
+  Bus, TrainFront, MapPin, LayoutGrid, Microscope
 } from 'lucide-react';
 import FontLink from '../components/FontLink';
 import type { AnswersInput, ClockInput, EngInput, Exercise, FeedbackState, OpInput, ProbInput, Section, Subject } from '../features/app/types';
 import EnglishExercisesSection from './exercises/EnglishExercisesSection';
 import LenguaExercisesSection from './exercises/LenguaExercisesSection';
 import MathExercisesSection from './exercises/MathExercisesSection';
+import ScienceExercisesSection from './exercises/ScienceExercisesSection';
 import ExerciseActions from './exercises/ExerciseActions';
 import { answerOption } from '../styles/variants';
 import { layout, typography } from '../styles/tokens';
@@ -27,6 +29,7 @@ interface ExercisesPageProps {
   clockInput: ClockInput;
   probInput: ProbInput;
   engInput: EngInput;
+  featureMatrix: boolean[][];
   setView: (value: 'landing' | 'themes' | 'exercises') => void;
   setCurrentSection: (value: Section) => void;
   setUserNumbers: (value: string[]) => void;
@@ -36,6 +39,7 @@ interface ExercisesPageProps {
   setProbInput: (value: ProbInput) => void;
   setEngInput: (value: EngInput) => void;
   handleCellClick: (row: number, col: number) => void;
+  handleMatrixCellClick: (row: number, col: number) => void;
   playAudio: (text: string) => void;
   checkSolution: () => void;
   generateGraficos: () => void;
@@ -49,6 +53,10 @@ interface ExercisesPageProps {
   generateCadaPalabra: () => void;
   generateCorrigeError: () => void;
   generateCambiaGenero: () => void;
+  generateSciTransport: () => void;
+  generateSciHowTravel: () => void;
+  generateSciWhere: () => void;
+  generateSciMatrix: () => void;
 }
 
 const ExercisesPage = ({
@@ -64,6 +72,7 @@ const ExercisesPage = ({
   clockInput,
   probInput,
   engInput,
+  featureMatrix,
   setView,
   setCurrentSection,
   setUserNumbers,
@@ -73,6 +82,7 @@ const ExercisesPage = ({
   setProbInput,
   setEngInput,
   handleCellClick,
+  handleMatrixCellClick,
   playAudio,
   checkSolution,
   generateGraficos,
@@ -85,7 +95,11 @@ const ExercisesPage = ({
   generateEngListen,
   generateCadaPalabra,
   generateCorrigeError,
-  generateCambiaGenero
+  generateCambiaGenero,
+  generateSciTransport,
+  generateSciHowTravel,
+  generateSciWhere,
+  generateSciMatrix
 }: ExercisesPageProps): JSX.Element => {
   const sidebarMates = [
     { id: 'graficos', icon: <BarChart3 />, label: 'Gráficos' }, { id: 'operaciones', icon: <Hash />, label: 'Operaciones' },
@@ -99,7 +113,20 @@ const ExercisesPage = ({
     { id: 'cadaPalabra', icon: <List />, label: 'Cada palabra' }, { id: 'corrigeError', icon: <Type />, label: 'Corrige error' },
     { id: 'cambiaGenero', icon: <BookOpen />, label: 'Cambia género' }
   ];
-  const navItems = subject === 'matematicas' ? sidebarMates : subject === 'english' ? sidebarEnglish : sidebarLengua;
+  const sidebarScience = [
+    { id: 'sciTransport', icon: <Bus />, label: 'Transport' },
+    { id: 'sciHowTravel', icon: <TrainFront />, label: 'How we travel' },
+    { id: 'sciWhere', icon: <MapPin />, label: 'Where' },
+    { id: 'sciMatrix', icon: <LayoutGrid />, label: 'Features' }
+  ];
+  const navItems =
+    subject === 'matematicas'
+      ? sidebarMates
+      : subject === 'english'
+        ? sidebarEnglish
+        : subject === 'science'
+          ? sidebarScience
+          : sidebarLengua;
 
   return (
     <div className="flex h-screen bg-[#fdfcf0] text-slate-800 overflow-hidden" style={{ fontFamily: "'Borel', cursive" }}>
@@ -109,11 +136,19 @@ const ExercisesPage = ({
           <ArrowLeft size={20} strokeWidth={3} /> Volver a Temas
         </button>
         <h1 className="text-3xl font-bold mb-1 flex items-center gap-2">
-          {subject === 'matematicas' ? <Calculator className="text-yellow-400" /> : subject === 'english' ? <Globe className="text-sky-400" /> : <BookOpen className="text-rose-400" />}
-          {subject === 'matematicas' ? 'Mates 1º' : subject === 'english' ? 'English 1º' : 'Lengua 1º'}
+          {subject === 'matematicas' ? (
+            <Calculator className="text-yellow-400" />
+          ) : subject === 'english' ? (
+            <Globe className="text-sky-400" />
+          ) : subject === 'science' ? (
+            <Microscope className="text-emerald-400" />
+          ) : (
+            <BookOpen className="text-rose-400" />
+          )}
+          {subject === 'matematicas' ? 'Mates 1º' : subject === 'english' ? 'English 1º' : subject === 'science' ? 'Science 1º' : 'Lengua 1º'}
         </h1>
         <p className="text-indigo-300 text-sm font-bold uppercase tracking-widest mb-8 px-1">
-          {subject === 'matematicas' ? 'Tema 7' : 'Tema 8'}
+          {subject === 'matematicas' ? 'Tema 7' : subject === 'english' || subject === 'science' ? 'Unit 8' : 'Tema 8'}
         </p>
         <nav className="flex-1 space-y-3">
           {navItems.map(item => (
@@ -137,7 +172,7 @@ const ExercisesPage = ({
           <div className="mb-6 flex justify-between items-end">
             <div>
               <span className="bg-indigo-100 text-indigo-700 px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
-                {subject === 'english' ? 'UNIT 8' : subject === 'matematicas' ? 'TEMA 7' : 'TEMA 8'}
+                {subject === 'english' || subject === 'science' ? 'UNIT 8' : subject === 'matematicas' ? 'TEMA 7' : 'TEMA 8'}
               </span>
               <h2 className={typography.sectionTitle}>{exercise.name}</h2>
             </div>
@@ -158,6 +193,16 @@ const ExercisesPage = ({
               currentSection={currentSection}
               engInput={engInput}
               setEngInput={setEngInput}
+            />
+
+            <ScienceExercisesSection
+              exercise={exercise}
+              currentSection={currentSection}
+              engInput={engInput}
+              setEngInput={setEngInput}
+              featureMatrix={featureMatrix}
+              onMatrixCellClick={handleMatrixCellClick}
+              isCompleted={isCompleted}
             />
 
             <MathExercisesSection
@@ -194,6 +239,10 @@ const ExercisesPage = ({
               generateCadaPalabra={generateCadaPalabra}
               generateCorrigeError={generateCorrigeError}
               generateCambiaGenero={generateCambiaGenero}
+              generateSciTransport={generateSciTransport}
+              generateSciHowTravel={generateSciHowTravel}
+              generateSciWhere={generateSciWhere}
+              generateSciMatrix={generateSciMatrix}
             />
           </div>
         </div>
