@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('user navigates from landing to exercises and back', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: /1º Primaria/ }).click();
 
   await page.getByRole('button', { name: 'Mates' }).click();
   await expect(page.getByText('Matemáticas')).toBeVisible();
@@ -16,6 +17,7 @@ test('user navigates from landing to exercises and back', async ({ page }) => {
 
 test('user can open lengua theme 8 from landing', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: /1º Primaria/ }).click();
   await page.getByRole('button', { name: 'Lengua' }).click();
   await expect(page.getByText('Lengua')).toBeVisible();
 
@@ -25,6 +27,7 @@ test('user can open lengua theme 8 from landing', async ({ page }) => {
 
 test('user can open science unit 8 from landing', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: /1º Primaria/ }).click();
   await page.getByRole('button', { name: 'Science' }).click();
   await expect(page.getByText('Science')).toBeVisible();
 

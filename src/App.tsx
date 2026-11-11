@@ -1,4 +1,6 @@
 import LandingPage from './pages/LandingPage';
+import ResourcesPage from './pages/ResourcesPage';
+import SubjectsPage from './pages/SubjectsPage';
 import ExercisesPage from './pages/ExercisesPage';
 import ThemesPage from './pages/ThemesPage';
 import { useAppSelector } from './app/store';
@@ -8,6 +10,7 @@ import useExerciseController from './hooks/useExerciseController';
 const App = (): JSX.Element | null => {
   const {
     view,
+    course,
     subject,
     currentSection,
     exercise,
@@ -25,6 +28,7 @@ const App = (): JSX.Element | null => {
 
   const {
     setView,
+    setCourse,
     setSubject,
     setCurrentSection,
     setExercise,
@@ -86,22 +90,39 @@ const App = (): JSX.Element | null => {
     setFeatureMatrix
   });
 
-  if (view === 'landing') {
+  if (view === 'landing' || !course) {
     return (
       <LandingPage
-        onSelectSubject={nextSubject => {
-          setSubject(nextSubject);
-          setView('themes');
+        onSelectCourse={nextCourse => {
+          setCourse(nextCourse);
+          setView('subjects');
         }}
       />
     );
+  }
+
+  if (view === 'subjects') {
+    return (
+      <SubjectsPage
+        course={course}
+        onBack={() => setView('landing')}
+        onSelectSubject={nextSubject => {
+          setSubject(nextSubject);
+          setView(course === 2 ? 'resources' : 'themes');
+        }}
+      />
+    );
+  }
+
+  if (view === 'resources') {
+    return <ResourcesPage subject={subject} onBack={() => setView('subjects')} />;
   }
 
   if (view === 'themes') {
     return (
       <ThemesPage
         subject={subject}
-        onBack={() => setView('landing')}
+        onBack={() => setView('subjects')}
         onSelectSection={section => {
           setCurrentSection(section);
           setView('exercises');

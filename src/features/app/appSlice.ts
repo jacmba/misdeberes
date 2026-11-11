@@ -3,6 +3,7 @@ import type {
   AnswersInput,
   AppState,
   ClockInput,
+  Course,
   EngInput,
   Exercise,
   FeedbackState,
@@ -15,6 +16,7 @@ import type {
 
 const initialState: AppState = {
   view: 'landing',
+  course: null,
   subject: null,
   currentSection: '',
   exercise: null,
@@ -35,6 +37,10 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     setView(state, action: PayloadAction<View>) { state.view = action.payload; },
+    setCourse(state, action: PayloadAction<Course>) {
+      state.course = action.payload;
+      state.subject = null;
+    },
     setSubject(state, action: PayloadAction<Subject>) { state.subject = action.payload; },
     setCurrentSection(state, action: PayloadAction<Section>) { state.currentSection = action.payload; },
     setExercise(state, action: PayloadAction<Exercise | null>) { state.exercise = action.payload; },
@@ -53,6 +59,7 @@ const appSlice = createSlice({
 
 export const {
   setView,
+  setCourse,
   setSubject,
   setCurrentSection,
   setExercise,

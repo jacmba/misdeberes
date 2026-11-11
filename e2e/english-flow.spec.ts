@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('english numbers and listen flows render expected UI', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: /1º Primaria/ }).click();
   await page.getByRole('button', { name: 'English' }).click();
   await page.getByRole('button', { name: /Unit 8/i }).click();
 

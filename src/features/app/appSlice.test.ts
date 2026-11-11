@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import reducer, {
   setAnswers,
   setClockInput,
+  setCourse,
   setCurrentSection,
   setEngInput,
   setExercise,
@@ -21,6 +22,7 @@ const initial = reducer(undefined, { type: '@@INIT' }) as AppState;
 describe('appSlice', () => {
   it('has expected initial state shape', () => {
     expect(initial.view).toBe('landing');
+    expect(initial.course).toBeNull();
     expect(initial.subject).toBeNull();
     expect(initial.grid).toHaveLength(8);
     expect(initial.grid[0]).toHaveLength(4);
@@ -40,6 +42,13 @@ describe('appSlice', () => {
     expect(state.currentSection).toBe('graficos');
     expect(state.isCompleted).toBe(true);
     expect(state.feedback?.type).toBe('success');
+  });
+
+  it('selecting a course resets the subject', () => {
+    let state = reducer(initial, setSubject('english'));
+    state = reducer(state, setCourse(2));
+    expect(state.course).toBe(2);
+    expect(state.subject).toBeNull();
   });
 
   it('updates exercise and input payloads', () => {
