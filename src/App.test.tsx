@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import appReducer from './features/app/appSlice';
 
@@ -31,6 +31,44 @@ describe('App integration flow', () => {
     pickCourse(/1º Primaria/i);
     fireEvent.click(await screen.findByRole('button', { name: /Cursos/i }));
     expect(await screen.findByRole('button', { name: /2º Primaria/i })).toBeInTheDocument();
+  });
+
+  describe('exámenes de 2º', () => {
+    afterEach(() => vi.useRealTimers());
+
+    it('shows the next exam on the subject card and on the resources page', async () => {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      vi.setSystemTime(new Date(2026, 10, 11, 10, 0));
+      renderApp();
+      pickCourse(/2º Primaria/i);
+
+      const science = await screen.findByRole('button', { name: /Science/i });
+      expect(science).toHaveTextContent(/Examen 13 nov/i);
+      expect(screen.getByRole('button', { name: /English/i })).toHaveTextContent(/Examen hoy/i);
+      expect(screen.getByRole('button', { name: /Lengua/i })).not.toHaveTextContent(/Examen/i);
+
+      fireEvent.click(science);
+      const box = await screen.findByRole('region', { name: /Próximos exámenes/i });
+      expect(box).toHaveTextContent(/En 2 días/i);
+      expect(screen.getByText(/Exámenes anteriores/i)).toBeInTheDocument();
+    });
+
+    it('marks an exam happening today', async () => {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      vi.setSystemTime(new Date(2026, 10, 11, 10, 0));
+      renderApp();
+      pickCourse(/2º Primaria/i);
+      fireEvent.click(await screen.findByRole('button', { name: /English/i }));
+      expect(await screen.findByRole('region', { name: /Próximos exámenes/i })).toHaveTextContent(/¡Hoy!/);
+    });
+
+    it('does not show exam badges in 1º', async () => {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      vi.setSystemTime(new Date(2026, 10, 11, 10, 0));
+      renderApp();
+      pickCourse(/1º Primaria/i);
+      expect(await screen.findByRole('button', { name: /Science/i })).not.toHaveTextContent(/Examen/i);
+    });
   });
 
   it('opens 2º science resources with embedded videos and external links', async () => {

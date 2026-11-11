@@ -37,3 +37,18 @@ test('2º primaria: cada asignatura muestra sus bloques', async ({ page }) => {
   await page.getByRole('button', { name: 'English' }).click();
   await expect(page.getByRole('heading', { name: /I've got/ })).toBeVisible();
 });
+
+test('2º primaria: avisa de los próximos exámenes', async ({ page }) => {
+  await page.clock.setFixedTime(new Date(2026, 10, 11, 10, 0));
+  await page.goto('/');
+  await page.getByRole('button', { name: /2º Primaria/ }).click();
+
+  const science = page.getByRole('button', { name: 'Science' });
+  await expect(science).toContainText('Examen 13 nov');
+
+  await science.click();
+  const exams = page.getByRole('region', { name: 'Próximos exámenes' });
+  await expect(exams).toContainText('En 2 días');
+  await page.getByText('Exámenes anteriores').click();
+  await expect(exams).toContainText('Los animales');
+});

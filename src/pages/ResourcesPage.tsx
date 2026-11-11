@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { ArrowLeft, Book, Calculator, ExternalLink, Gamepad2, Globe, LucideIcon, Microscope, Sparkles, Shapes } from 'lucide-react';
+import ExamsBox from '../components/ExamsBox';
 import FontLink from '../components/FontLink';
+import { formatShortDate as formatDate, toLocalIsoDate } from '../domain/data/examenes2Data';
 import { getSubjectResources, getYoutubeEmbedUrl, type Resource, type ResourceKind } from '../domain/data/recursos2Data';
 import type { Subject } from '../features/app/types';
 import { cn } from '../styles/cn';
@@ -22,11 +24,6 @@ const kindInfo: Record<Exclude<ResourceKind, 'video'>, { label: string; icon: Lu
   juegos: { label: 'Varios juegos', icon: Shapes, tone: 'bg-amber-100 text-amber-700' },
   juego: { label: 'Juego', icon: Gamepad2, tone: 'bg-sky-100 text-sky-700' },
   interactivo: { label: 'Interactivo', icon: Sparkles, tone: 'bg-fuchsia-100 text-fuchsia-700' }
-};
-
-const formatDate = (iso: string): string => {
-  const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 };
 
 const VideoCard = ({ resource }: { resource: Resource }): JSX.Element | null => {
@@ -90,6 +87,8 @@ const ResourcesPage = ({ subject, onBack }: ResourcesPageProps): JSX.Element => 
       </div>
       <div className="flex items-center gap-4 sm:gap-6 text-4xl sm:text-6xl font-black text-indigo-900 mb-2"><Icon size={56} className="text-indigo-500 shrink-0" /> {info?.title} 2º</div>
       <p className="text-xl font-bold text-slate-500 mb-12 text-center">Vídeos y juegos que nos manda la seño</p>
+
+      <ExamsBox subject={subject} today={toLocalIsoDate(new Date())} />
 
       <div className="w-full max-w-5xl space-y-14">
         {!data?.blocks.length && <p className="text-2xl font-bold text-slate-400 text-center">Todavía no hay recursos.</p>}
