@@ -4,7 +4,8 @@ export const layout = {
   panelCard: 'bg-white rounded-[3rem] p-10 shadow-sm border-[6px] border-slate-100',
   sidebar: 'w-72 bg-indigo-900 text-white flex flex-col p-6 shadow-xl shrink-0',
   contentWrap: 'flex-1 overflow-y-auto px-8 pb-8 pt-12',
-  contentMax: 'max-w-5xl mx-auto'
+  contentMax: 'max-w-5xl mx-auto',
+  backButton: 'flex items-center gap-2 text-indigo-500 hover:text-indigo-800 text-2xl font-bold bg-white px-6 py-3 rounded-full shadow-sm border-4 border-indigo-100 transition-colors'
 };
 
 export const typography = {

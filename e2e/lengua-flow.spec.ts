@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('lengua unit renders all three exercise sections', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: /1º Primaria/ }).click();
   await page.getByRole('button', { name: 'Lengua' }).click();
   await page.getByRole('button', { name: /Tema 8/i }).click();
 

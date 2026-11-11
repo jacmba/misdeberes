@@ -57,7 +57,7 @@ const ThemesPage = ({ subject, onBack, onSelectSection }: ThemesPageProps): JSX.
     <div className={layout.pageRoot} style={{ fontFamily: "'Borel', cursive" }}>
       <FontLink />
       <div className="w-full max-w-5xl flex justify-between items-center mb-16">
-        <button onClick={onBack} className="flex items-center gap-2 text-indigo-500 hover:text-indigo-800 text-2xl font-bold bg-white px-6 py-3 rounded-full shadow-sm border-4 border-indigo-100 transition-colors"><ArrowLeft strokeWidth={3} /> Asignaturas</button>
+        <button onClick={onBack} className={layout.backButton}><ArrowLeft strokeWidth={3} /> Asignaturas</button>
       </div>
       <div className="flex items-center gap-6 text-6xl font-black text-indigo-900 mb-16"><Icon size={64} className="text-indigo-500" /> {subjectTitle}</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl w-full">

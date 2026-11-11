@@ -6,7 +6,7 @@ import {
   Bus, TrainFront, MapPin, LayoutGrid, Microscope
 } from 'lucide-react';
 import FontLink from '../components/FontLink';
-import type { AnswersInput, ClockInput, EngInput, Exercise, FeedbackState, OpInput, ProbInput, Section, Subject } from '../features/app/types';
+import type { AnswersInput, ClockInput, EngInput, Exercise, FeedbackState, OpInput, ProbInput, Section, Subject, View } from '../features/app/types';
 import EnglishExercisesSection from './exercises/EnglishExercisesSection';
 import LenguaExercisesSection from './exercises/LenguaExercisesSection';
 import MathExercisesSection from './exercises/MathExercisesSection';
@@ -30,7 +30,7 @@ interface ExercisesPageProps {
   probInput: ProbInput;
   engInput: EngInput;
   featureMatrix: boolean[][];
-  setView: (value: 'landing' | 'themes' | 'exercises') => void;
+  setView: (value: View) => void;
   setCurrentSection: (value: Section) => void;
   setUserNumbers: (value: string[]) => void;
   setAnswers: (value: AnswersInput) => void;

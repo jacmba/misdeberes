@@ -1,4 +1,5 @@
-export type View = 'landing' | 'themes' | 'exercises';
+export type View = 'landing' | 'subjects' | 'themes' | 'exercises' | 'resources';
+export type Course = 1 | 2;
 export type Subject = 'lengua' | 'matematicas' | 'english' | 'science' | null;
 export type Section =
   | 'graficos'
@@ -251,6 +252,7 @@ export type EngInput = Record<string, string>;
 
 export interface AppState {
   view: View;
+  course: Course | null;
   subject: Subject;
   currentSection: Section;
   exercise: Exercise | null;

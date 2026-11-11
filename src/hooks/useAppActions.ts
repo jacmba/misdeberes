@@ -1,6 +1,7 @@
 import {
   setAnswers as setAnswersAction,
   setClockInput as setClockInputAction,
+  setCourse as setCourseAction,
   setCurrentSection as setCurrentSectionAction,
   setEngInput as setEngInputAction,
   setExercise as setExerciseAction,
@@ -14,7 +15,7 @@ import {
   setUserNumbers as setUserNumbersAction,
   setView as setViewAction
 } from '../features/app/appSlice';
-import type { AnswersInput, ClockInput, EngInput, Exercise, FeedbackState, OpInput, ProbInput, Section, Subject, View } from '../features/app/types';
+import type { AnswersInput, ClockInput, Course, EngInput, Exercise, FeedbackState, OpInput, ProbInput, Section, Subject, View } from '../features/app/types';
 import { useAppDispatch, useAppSelector } from '../app/store';
 
 const useAppActions = () => {
@@ -22,6 +23,7 @@ const useAppActions = () => {
   const { grid, clockInput, featureMatrix } = useAppSelector(state => state.app);
 
   const setView = (value: View) => dispatch(setViewAction(value));
+  const setCourse = (value: Course) => dispatch(setCourseAction(value));
   const setSubject = (value: Subject) => dispatch(setSubjectAction(value));
   const setCurrentSection = (value: Section) => dispatch(setCurrentSectionAction(value));
   const setExercise = (value: Exercise | null) => dispatch(setExerciseAction(value));
@@ -39,6 +41,7 @@ const useAppActions = () => {
 
   return {
     setView,
+    setCourse,
     setSubject,
     setCurrentSection,
     setExercise,
