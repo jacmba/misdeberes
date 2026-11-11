@@ -35,6 +35,18 @@ describe('recursos de 2º', () => {
   });
 });
 
+describe('juegos de Wordwall embebibles', () => {
+  it('cada juego suelto de Wordwall tiene su URL de embed', () => {
+    const singles = allResources.filter(r => r.kind === 'juego' && r.url.includes('wordwall.net'));
+    expect(singles).toHaveLength(11);
+    singles.forEach(r => expect(r.embedUrl).toMatch(/^https:\/\/wordwall\.net\/(es\/)?embed\/[0-9a-f]{32}\?themeId=\d+$/));
+  });
+
+  it('las colecciones no se embeben', () => {
+    allResources.filter(r => r.kind === 'juegos').forEach(r => expect(r.embedUrl).toBeUndefined());
+  });
+});
+
 describe('getYoutubeEmbedUrl', () => {
   it('convierte enlaces youtu.be y youtube.com a embed sin cookies', () => {
     expect(getYoutubeEmbedUrl('https://youtu.be/mOKmjYwfDGU')).toBe('https://www.youtube-nocookie.com/embed/mOKmjYwfDGU');

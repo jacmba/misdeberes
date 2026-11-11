@@ -86,6 +86,25 @@ describe('App integration flow', () => {
     expect(await screen.findByRole('button', { name: /Lengua/i })).toBeInTheDocument();
   });
 
+  it('plays a single Wordwall game inside the page on demand', async () => {
+    renderApp();
+    pickCourse(/2º Primaria/i);
+    fireEvent.click(await screen.findByRole('button', { name: /Science/i }));
+
+    expect(screen.queryByTitle('Juego: Nutrition, sensitivity and reproduction')).not.toBeInTheDocument();
+    const play = screen.getByRole('button', { name: /Jugar aquí: Nutrition, sensitivity and reproduction/i });
+    expect(play).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(play);
+
+    const frame = await screen.findByTitle('Juego: Nutrition, sensitivity and reproduction');
+    expect(frame).toHaveAttribute('src', 'https://wordwall.net/embed/bb4f10a6e743462a916f287f021b486c?themeId=1');
+    expect(play).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.click(play);
+    expect(screen.queryByTitle('Juego: Nutrition, sensitivity and reproduction')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Jugar aquí: Bones and muscles/i })).not.toBeInTheDocument();
+  });
+
   it('navigates landing -> themes -> exercises', async () => {
     renderApp();
     pickCourse(/1º Primaria/i);

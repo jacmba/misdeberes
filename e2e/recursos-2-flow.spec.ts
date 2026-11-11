@@ -52,3 +52,18 @@ test('2º primaria: avisa de los próximos exámenes', async ({ page }) => {
   await page.getByText('Exámenes anteriores').click();
   await expect(exams).toContainText('Los animales');
 });
+
+test('2º primaria: se puede jugar a un juego de Wordwall dentro de la página', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: /2º Primaria/ }).click();
+  await page.getByRole('button', { name: 'English' }).click();
+
+  await page.getByRole('button', { name: "Jugar aquí: I've got / I haven't got (toys)" }).click();
+  await expect(page.locator(`iframe[title="Juego: I've got / I haven't got (toys)"]`)).toHaveAttribute(
+    'src',
+    'https://wordwall.net/es/embed/fce4107f0fa346f7b77b547284daf1f8?themeId=21'
+  );
+
+  await page.getByRole('button', { name: "Cerrar juego: I've got / I haven't got (toys)" }).click();
+  await expect(page.locator(`iframe[title="Juego: I've got / I haven't got (toys)"]`)).toHaveCount(0);
+});

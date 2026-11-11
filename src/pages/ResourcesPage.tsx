@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { ArrowLeft, Book, Calculator, ExternalLink, Gamepad2, Globe, LucideIcon, Microscope, Sparkles, Shapes } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowLeft, Book, Calculator, ExternalLink, Gamepad2, Globe, LucideIcon, Microscope, Play, Sparkles, Shapes, X } from 'lucide-react';
 import ExamsBox from '../components/ExamsBox';
 import FontLink from '../components/FontLink';
 import { formatShortDate as formatDate, toLocalIsoDate } from '../domain/data/examenes2Data';
@@ -51,22 +51,46 @@ const VideoCard = ({ resource }: { resource: Resource }): JSX.Element | null => 
 };
 
 const LinkCard = ({ resource }: { resource: Resource }): JSX.Element => {
+  const [playing, setPlaying] = useState(false);
   const info = kindInfo[resource.kind as Exclude<ResourceKind, 'video'>];
   const Icon = info.icon;
+  const frameId = `game-${resource.url.replace(/\W+/g, '-')}`;
   return (
-    <a
-      href={resource.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center gap-4 bg-white rounded-[2rem] border-4 border-indigo-100 p-4 shadow-sm hover:-translate-y-1 hover:border-indigo-400 hover:shadow-lg transition-all"
-    >
-      <span className={cn('w-14 h-14 rounded-2xl flex items-center justify-center shrink-0', info.tone)}><Icon size={28} /></span>
-      <span className="flex-1 min-w-0">
-        <span className="block text-xl font-black text-slate-800 leading-tight">{resource.title}</span>
-        <span className="block text-sm font-bold text-slate-400 mt-1">{info.label} · {formatDate(resource.date)}</span>
-      </span>
-      <ExternalLink size={22} className="text-indigo-300 shrink-0" aria-hidden="true" />
-    </a>
+    <div className={cn('bg-white rounded-[2rem] border-4 shadow-sm transition-all', playing ? 'md:col-span-2 border-indigo-400' : 'border-indigo-100 hover:border-indigo-400 hover:shadow-lg')}>
+      <div className="flex items-center gap-3 p-4">
+        <a href={resource.url} target="_blank" rel="noopener noreferrer" className="flex flex-1 min-w-0 items-center gap-4">
+          <span className={cn('w-14 h-14 rounded-2xl flex items-center justify-center shrink-0', info.tone)}><Icon size={28} /></span>
+          <span className="flex-1 min-w-0">
+            <span className="block text-xl font-black text-slate-800 leading-tight">{resource.title}</span>
+            <span className="block text-sm font-bold text-slate-400 mt-1">{info.label} · {formatDate(resource.date)}</span>
+          </span>
+          <ExternalLink size={22} className="text-indigo-300 shrink-0" aria-hidden="true" />
+        </a>
+        {resource.embedUrl && (
+          <button
+            type="button"
+            onClick={() => setPlaying(!playing)}
+            aria-expanded={playing}
+            aria-controls={frameId}
+            aria-label={`${playing ? 'Cerrar juego' : 'Jugar aquí'}: ${resource.title}`}
+            className={cn(
+              'shrink-0 flex items-center gap-2 rounded-full px-4 py-2 text-base font-black border-4 transition-colors',
+              playing ? 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200' : 'bg-emerald-500 border-emerald-600 text-white hover:bg-emerald-600'
+            )}
+          >
+            {playing ? <X size={20} aria-hidden="true" /> : <Play size={20} aria-hidden="true" />}
+            <span className="hidden sm:inline">{playing ? 'Cerrar' : 'Jugar aquí'}</span>
+          </button>
+        )}
+      </div>
+      {resource.embedUrl && playing && (
+        <div id={frameId} className="px-4 pb-4">
+          <div className="aspect-[4/3] max-h-[80vh] w-full rounded-2xl overflow-hidden bg-slate-100">
+            <iframe className="w-full h-full" src={resource.embedUrl} title={`Juego: ${resource.title}`} allowFullScreen />
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -105,7 +129,7 @@ const ResourcesPage = ({ subject, onBack }: ResourcesPageProps): JSX.Element => 
                 </div>
               )}
               {links.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row-dense gap-4 mt-6">
                   {links.map(l => <LinkCard key={l.url} resource={l} />)}
                 </div>
               )}
